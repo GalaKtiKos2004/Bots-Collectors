@@ -25,7 +25,6 @@ public class Bot : MonoBehaviour
 
         if (currentPosition == _startPosition && _inBase == false)
         {
-            Debug.Log("In Base");
             _inBase = true;
             CameBack?.Invoke(this, _resource);
         }
