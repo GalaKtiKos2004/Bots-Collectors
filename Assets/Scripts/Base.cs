@@ -12,7 +12,8 @@ public class Base : MonoBehaviour
     [SerializeField] private float _scanDelay;
 
     private Queue<Bot> _freeBots;
-    private List<Resource> _uncollectedResource;
+    private List<Resource> _uncollectedResources;
+    private List<Resource> _resourcesInTransit;
 
     private WaitForSeconds _wait;
 
@@ -23,7 +24,8 @@ public class Base : MonoBehaviour
     private void Awake()
     {
         _freeBots = new();
-        _uncollectedResource = new();
+        _uncollectedResources = new();
+        _resourcesInTransit = new();
         _wait = new(_scanDelay);
         _resourceCount = 0;
     }
@@ -49,14 +51,8 @@ public class Base : MonoBehaviour
 
     private void Update()
     {
+        Debug.Log(_uncollectedResources.Count);
         TrySendBotToResource();
-    }
-
-    private void OnDrawGizmos()
-    {
-
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(Vector3.zero, _scanBoxSize);
     }
 
     private void Scan()
@@ -67,23 +63,29 @@ public class Base : MonoBehaviour
         foreach (var hitCollider in hitColliders)
         {
             hitCollider.TryGetComponent(out Resource resource);
-            _uncollectedResource.Add(resource);
+
+            if (_uncollectedResources.Contains(resource) == false && _resourcesInTransit.Contains(resource) == false)
+            {
+                _uncollectedResources.Add(resource);
+            }
         }
     }
 
     private void TrySendBotToResource()
     {
-        if (_freeBots.Count == 0 || _uncollectedResource.Count == 0)
+        if (_freeBots.Count == 0 || _uncollectedResources.Count == 0)
         {
             return;
         }
 
-        _freeBots.Dequeue().GoToResource(_uncollectedResource[0]);
-        _uncollectedResource.RemoveAt(0);
+        _freeBots.Dequeue().GoToResource(_uncollectedResources[0]);
+        _resourcesInTransit.Add(_uncollectedResources[0]);
+        _uncollectedResources.RemoveAt(0);
     }
 
     private void OnBotCameBack(Bot bot, Resource resource)
     {
+        _uncollectedResources.Remove(resource);
         Destroy(resource.gameObject);
         _freeBots.Enqueue(bot);
         ResourceChanged?.Invoke(++_resourceCount);
