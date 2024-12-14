@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class Bot : MonoBehaviour
+public class BotMover : MonoBehaviour
 {
     private NavMeshAgent _agent;
     private Resource _resource;
@@ -11,7 +11,7 @@ public class Bot : MonoBehaviour
 
     private bool _inBase = true;
 
-    public event Action<Bot, Resource> CameBack;
+    public event Action<BotMover, Resource> CameBack;
 
     private void Awake()
     {

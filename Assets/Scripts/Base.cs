@@ -8,10 +8,10 @@ public class Base : MonoBehaviour
 {
     [SerializeField] private LayerMask _resourceLayer;
     [SerializeField] private Vector3 _scanBoxSize;
-    [SerializeField] private List<Bot> _bots;
+    [SerializeField] private List<BotMover> _bots;
     [SerializeField] private float _scanDelay;
 
-    private Queue<Bot> _freeBots;
+    private Queue<BotMover> _freeBots;
     private List<Resource> _uncollectedResources;
     private List<Resource> _resourcesInTransit;
 
@@ -83,7 +83,7 @@ public class Base : MonoBehaviour
         _uncollectedResources.RemoveAt(0);
     }
 
-    private void OnBotCameBack(Bot bot, Resource resource)
+    private void OnBotCameBack(BotMover bot, Resource resource)
     {
         _uncollectedResources.Remove(resource);
         Destroy(resource.gameObject);

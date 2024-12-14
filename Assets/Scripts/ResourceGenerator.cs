@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spawner : MonoBehaviour
+public class ResourceGenerator : MonoBehaviour
 {
     [SerializeField] private List<SpawnPoint> _spawnPoints;
     [SerializeField] private float _spawnDelay;
