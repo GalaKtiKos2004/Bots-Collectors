@@ -8,10 +8,10 @@ public class Base : MonoBehaviour
 {
     [SerializeField] private LayerMask _resourceLayer;
     [SerializeField] private Vector3 _scanBoxSize;
-    [SerializeField] private List<BotMover> _bots;
+    [SerializeField] private List<Bot> _bots;
     [SerializeField] private float _scanDelay;
 
-    private Queue<BotMover> _freeBots;
+    private Queue<Bot> _freeBots;
     private List<Resource> _uncollectedResources;
     private List<Resource> _resourcesInTransit;
 
@@ -51,7 +51,6 @@ public class Base : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(_uncollectedResources.Count);
         TrySendBotToResource();
     }
 
@@ -62,7 +61,11 @@ public class Base : MonoBehaviour
 
         foreach (var hitCollider in hitColliders)
         {
-            hitCollider.TryGetComponent(out Resource resource);
+            if (hitCollider.TryGetComponent(out Resource resource) == false)
+            {
+                continue;
+            }
+
 
             if (_uncollectedResources.Contains(resource) == false && _resourcesInTransit.Contains(resource) == false)
             {
@@ -83,7 +86,7 @@ public class Base : MonoBehaviour
         _uncollectedResources.RemoveAt(0);
     }
 
-    private void OnBotCameBack(BotMover bot, Resource resource)
+    private void OnBotCameBack(Bot bot, Resource resource)
     {
         _uncollectedResources.Remove(resource);
         Destroy(resource.gameObject);
