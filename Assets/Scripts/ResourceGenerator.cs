@@ -23,7 +23,7 @@ public class ResourceGenerator : MonoBehaviour
     {
         while (enabled)
         {
-            _spawnPoints[Utils.GetRandomNumber(_spawnPoints.Count - 1)].SpawnResource();
+            _spawnPoints[Random.Range(0, _spawnPoints.Count)].SpawnResource();
             yield return _wait;
         }
     }

@@ -5,8 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(TextMeshProUGUI))]
 public class BaseView : MonoBehaviour
 {
-    [SerializeField] private Base _base;
-
+    private Wallet _wallet;
     private TextMeshProUGUI _text;
 
     private void Awake()
@@ -14,14 +13,15 @@ public class BaseView : MonoBehaviour
         _text = GetComponent<TextMeshProUGUI>();
     }
 
-    private void OnEnable()
-    {
-        _base.ResourceChanged += OnResourceChanged;
-    }
-
     private void OnDisable()
     {
-        _base.ResourceChanged -= OnResourceChanged;
+        _wallet.ResourceChanged -= OnResourceChanged;
+    }
+
+    public void Init(Wallet wallet)
+    {
+        _wallet = wallet;
+        _wallet.ResourceChanged += OnResourceChanged;
     }
 
     private void OnResourceChanged(int value)
